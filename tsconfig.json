@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "app/utils/url.js", "app/utils/docSerialization.js", "app/utils/emoji-list.js", "app/utils/focusUtils.js", "app/utils/getDOMRangeRect.js", "app/utils/getSelectedNode.js", "app/utils/getThemeSelector.js", "app/utils/isMobileWidth.js", "app/utils/joinClasses.js", "app/utils/setFloatingElemPosition.js", "app/utils/setFloatingElemPositionForLinkEditor.js", "app/utils/swipe.js", "app/ui/Button.js", "app/ui/ColorPicker.js", "app/ui/ContentEditable.js", "app/ui/Dialog.js", "app/ui/DropDown.js", "app/ui/DropdownColorPicker.js", "app/ui/EquationEditor.js", "app/ui/ExcalidrawModal.js", "app/ui/FileInput.js", "app/ui/FlashMessage.js", "app/ui/ImageResizer.js", "app/ui/KatexEquationAlterer.js", "app/ui/KatexRenderer.js", "app/ui/Modal.js", "app/ui/Select.js", "app/ui/Switch.js", "app/ui/TextInput.js", "app/themes/CommentEditorTheme.js", "app/themes/PlaygroundEditorTheme.js", "app/themes/StickyEditorTheme.js", "app/server/validation.js", "app/hooks/useModal.js", "app/hooks/useReport.js", "app/hooks/useFlashMessage.js", "app/context/FlashMessageContext.js", "app/context/SettingsContext.js", "app/context/SharedHistoryContext.js", "app/context/ToolbarContext.js", "app/commenting/index.js", "app/nodes/DateTimeNode/DateTimeComponent.js", "app/nodes/DateTimeNode/DateTimeNode.js", "app/nodes/ExcalidrawNode/index.js", "app/nodes/ExcalidrawNode/ExcalidrawImage.js", "app/nodes/ExcalidrawNode/ExcalidrawComponent.js", "app/nodes/PageBreakNode/index.js", "app/nodes/YouTubeNode.js", "app/nodes/TweetNode.js", "app/nodes/StickyNode.js", "app/nodes/StickyComponent.js", "app/nodes/SpecialTextNode.js", "app/nodes/PollNode.js", "app/nodes/PollComponent.js", "app/nodes/PlaygroundNodes.js", "app/nodes/MentionNode.js", "app/nodes/LayoutItemNode.js", "app/nodes/LayoutContainerNode.js", "app/nodes/KeywordNode.js", "app/nodes/ImageNode.js", "app/nodes/ImageComponent.js", "app/nodes/FigmaNode.js", "app/nodes/EquationNode.js", "app/nodes/EquationComponent.js", "app/nodes/EmojiNode.js", "app/nodes/AutocompleteNode.js", "app/plugins/TablePlugin.js", "app/plugins/ActionsPlugin/index.js", "app/plugins/AutocompletePlugin/index.js", "app/plugins/AutoEmbedPlugin/index.js", "app/plugins/AutoLinkPlugin/index.js", "app/plugins/CodeActionMenuPlugin/index.js", "app/plugins/CodeActionMenuPlugin/utils.js", "app/plugins/CodeActionMenuPlugin/components/PrettierButton/index.js", "app/plugins/CodeActionMenuPlugin/components/CopyButton/index.js", "app/plugins/CodeHighlightPrismPlugin/index.js", "app/plugins/CodeHighlightShikiPlugin/index.js", "app/plugins/CollapsiblePlugin/index.js", "app/plugins/CollapsiblePlugin/CollapsibleUtils.js", "app/plugins/CollapsiblePlugin/CollapsibleContainerNode.js", "app/plugins/CollapsiblePlugin/CollapsibleContentNode.js", "app/plugins/CollapsiblePlugin/CollapsibleTitleNode.js", "app/plugins/CommentPlugin/index.js", "app/plugins/ComponentPickerPlugin/index.js", "app/plugins/ContextMenuPlugin/index.js", "app/plugins/DateTimePlugin/index.js", "app/plugins/DocsPlugin/index.js", "app/plugins/DragDropPastePlugin/index.js", "app/plugins/DraggableBlockPlugin/index.js", "app/plugins/EmojiPickerPlugin/index.js", "app/plugins/EmojisPlugin/index.js", "app/plugins/EquationsPlugin/index.js", "app/plugins/ExcalidrawPlugin/index.js", "app/plugins/FigmaPlugin/index.js", "app/plugins/FloatingLinkEditorPlugin/index.js", "app/plugins/FloatingTextFormatToolbarPlugin/index.js", "app/plugins/ImagesPlugin/index.js", "app/plugins/KeywordsPlugin/index.js", "app/plugins/LayoutPlugin/InsertLayoutDialog.js", "app/plugins/LayoutPlugin/LayoutPlugin.js", "app/plugins/LinkPlugin/index.js", "app/plugins/MarkdownShortcutPlugin/index.js", "app/plugins/MarkdownTransformers/index.js", "app/plugins/MaxLengthPlugin/index.js", "app/plugins/MentionsPlugin/index.js", "app/plugins/PageBreakPlugin/index.js", "app/plugins/PasteLogPlugin/index.js", "app/plugins/PollPlugin/index.js", "app/plugins/ShortcutsPlugin/index.js", "app/plugins/ShortcutsPlugin/shortcuts.js", "app/plugins/SpecialTextPlugin/index.js", "app/plugins/SpeechToTextPlugin/index.js", "app/plugins/StickyPlugin/index.js", "app/plugins/TabFocusPlugin/index.js", "app/plugins/TableActionMenuPlugin/index.js", "app/plugins/TableCellResizer/index.js", "app/plugins/TableHoverActionsPlugin/index.js", "app/plugins/TableOfContentsPlugin/index.js", "app/plugins/TestRecorderPlugin/index.js", "app/plugins/ToolbarPlugin/fontSize.js", "app/plugins/ToolbarPlugin/utils.js", "app/plugins/TreeViewPlugin/index.js", "app/plugins/TwitterPlugin/index.js", "app/plugins/TypingPerfPlugin/index.js", "app/plugins/YouTubePlugin/index.js", "app/plugins/ToolbarPlugin/index.js", "app/Editor.js"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

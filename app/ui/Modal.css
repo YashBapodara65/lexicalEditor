@@ -1,0 +1,54 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ */
+
+ .Modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* HIGHER than Lexical editor */
+}
+
+.Modal__modal {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.Modal__closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+}
+
+.Modal__title {
+  color: #444;
+  margin: 0px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.Modal__closeButton:hover {
+  background-color: #ddd;
+}
+.Modal__content {
+  padding-top: 20px;
+}
