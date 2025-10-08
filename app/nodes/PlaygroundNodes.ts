@@ -38,8 +38,9 @@ import {SpecialTextNode} from './SpecialTextNode';
 import {StickyNode} from './StickyNode';
 import {TweetNode} from './TweetNode';
 import {YouTubeNode} from './YouTubeNode';
-import {DynamicNode} from "./DynamicNode";
+import {FooterNode} from "./FooterNode";
 import {BodyNode} from "./BodyNode";
+import { TextImageNode } from './TextImageNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -77,8 +78,9 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   LayoutItemNode,
   SpecialTextNode,
   DateTimeNode,
-  DynamicNode,
   BodyNode,
+  FooterNode,
+  TextImageNode,
 ];
 
 export default PlaygroundNodes;

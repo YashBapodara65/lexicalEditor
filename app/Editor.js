@@ -70,8 +70,8 @@ import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import TwitterPlugin from "./plugins/TwitterPlugin";
 import YouTubePlugin from "./plugins/YouTubePlugin";
 import ContentEditable from "./ui/ContentEditable";
-import FooterPlugin from "./plugins/FooterPlugin";
 import TwoFieldPlugin from "./plugins/BodyPlugin";
+import TextImagePlugin from "./plugins/TextImagePlugin"
 
 const skipCollaborationInit =
   // eslint-disable-next-line no-undef
@@ -82,7 +82,61 @@ const skipCollaborationInit =
   window.parent.frames.right === window;
 
 // A small example initial state that will preload the editor.
-const initialJSON = null;
+const initialJSON = {
+  "root": {
+    "children": [
+      {
+        "children": [],
+        "direction": null,
+        "format": "",
+        "indent": 0,
+        "type": "paragraph",
+        "version": 1,
+        "textFormat": 0,
+        "textStyle": ""
+      },
+      {
+        "type": "text-image-node",
+        "version": 1,
+        "fields": [
+          {
+            "value": "asas222",
+            "style": "color: #000000;",
+            "format": 0
+          },
+          {
+            "value": "qqqqq",
+            "style": "color: #000000;",
+            "format": 0
+          }
+        ],
+        "image": "asasasa"
+      },
+      {
+        "type": "text-image-node",
+        "version": 1,
+        "fields": [
+          {
+            "value": "11",
+            "style": "color: #000000;",
+            "format": 0
+          },
+          {
+            "value": "22",
+            "style": "color: #000000;",
+            "format": 0
+          }
+        ],
+        "image": "ss"
+      }
+    ],
+    "direction": null,
+    "format": "",
+    "indent": 0,
+    "type": "root",
+    "version": 1
+  }
+};
 
 export default function Editor() {
   const { historyState } = useSharedHistoryContext();
@@ -322,8 +376,8 @@ export default function Editor() {
           isRichText={isRichText}
           shouldPreserveNewLinesInMarkdown={shouldPreserveNewLinesInMarkdown}
         />
-        <FooterPlugin />
-        <TwoFieldPlugin />
+        <TextImagePlugin />
+        {/* <TwoFieldPlugin /> */}
       </div>
       {/* {showTreeView && <TreeViewPlugin />} */}
 
