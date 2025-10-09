@@ -326,22 +326,56 @@ function CommentInputBox({
   };
 
   const submitComment = () => {
-    if (canSubmit) {
-      let quote = editor.getEditorState().read(() => {
-        const selection = selectionRef.current;
-        return selection ? selection.getTextContent() : '';
-      });
-      if (quote.length > 100) {
-        quote = quote.slice(0, 99) + '…';
+    if (!canSubmit) return;
+  
+    let quote = '';
+    let nodeId = null;
+  
+    editor.getEditorState().read(() => {
+      const selection = $getSelection();
+      if (selection) {
+        const nodes = selection.getNodes();
+        if (nodes.length > 0) {
+          // get first node id (parent or self)
+          nodeId = nodes[0].getKey ? nodes[0].getKey() : null;
+  
+          // concatenate all text content safely
+          quote = nodes
+            .map((node) => {
+              if (node.getText) {
+                return node.getText();
+              } else if (node.getChildren) {
+                // recursively get text from children
+                return node
+                  .getChildren()
+                  .map((child) => (child.getText ? child.getText() : ''))
+                  .join('');
+              }
+              return '';
+            })
+            .join('');
+  
+          // truncate if too long
+          if (quote.length > 100) {
+            quote = quote.slice(0, 99) + '…';
+          }
+        }
+        console.log('Selected node id:', nodes);
       }
+    });
+  
+    console.log('Quote text:', quote);
+  
+    if (quote) {
       submitAddComment(
         createThread(quote, [createComment(content, author)]),
         true,
         undefined,
-        selectionRef.current,
+        nodeId,
       );
-      selectionRef.current = null;
     }
+  
+    selectionRef.current = null;
   };
 
   const onChange = useOnChange(setContent, setCanSubmit);

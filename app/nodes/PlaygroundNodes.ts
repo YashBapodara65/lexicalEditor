@@ -41,6 +41,8 @@ import {YouTubeNode} from './YouTubeNode';
 import {FooterNode} from "./FooterNode";
 import {BodyNode} from "./BodyNode";
 import { TextImageNode } from './TextImageNode';
+import { ReadOnlyTextNode } from './ReadOnlyTextNode';
+import { TableBorderCellNode } from './TableBorderCellNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -81,6 +83,8 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   BodyNode,
   FooterNode,
   TextImageNode,
+  ReadOnlyTextNode,
+  TableBorderCellNode
 ];
 
 export default PlaygroundNodes;
