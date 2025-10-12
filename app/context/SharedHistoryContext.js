@@ -1,0 +1,19 @@
+'use client';
+
+import { createEmptyHistoryState } from '@lexical/react/LexicalHistoryPlugin';
+import React, { createContext, useContext, useMemo } from 'react';
+
+const Context = createContext({});
+
+export const SharedHistoryContext = ({ children }) => {
+  const historyContext = useMemo(
+    () => ({ historyState: createEmptyHistoryState() }),
+    [],
+  );
+
+  return <Context.Provider value={historyContext}>{children}</Context.Provider>;
+};
+
+export const useSharedHistoryContext = () => {
+  return useContext(Context);
+};

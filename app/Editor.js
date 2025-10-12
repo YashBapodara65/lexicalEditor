@@ -69,7 +69,7 @@ import TwitterPlugin from './plugins/TwitterPlugin';
 import YouTubePlugin from './plugins/YouTubePlugin';
 import ContentEditable from './ui/ContentEditable';
 import { $getRoot } from 'lexical';
-// import AutoPageBreakPlugin from './plugins/PageBreakPlugin/AutoPageBreak';
+import AutoPageBreakPlugin from './plugins/PageBreakPlugin/AutoPageBreak';
 
 export default function Editor() {
     const [skipCollaborationInit, setSkipCollaborationInit] = useState(false);
@@ -256,7 +256,7 @@ useEffect(() => {
             <TabIndentationPlugin maxIndent={7} />
             <CollapsiblePlugin />
             <PageBreakPlugin />
-            {/* <AutoPageBreakPlugin/> */}
+            <AutoPageBreakPlugin/>
             <LayoutPlugin />
             {floatingAnchorElem && (
               <>

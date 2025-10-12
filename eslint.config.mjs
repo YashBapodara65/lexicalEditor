@@ -19,6 +19,10 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    plugins: ["sort-keys-fix"],
+    rules: {
+      "sort-keys-fix/sort-keys-fix": "warn",
+    },
   },
 ];
 

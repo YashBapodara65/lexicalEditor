@@ -1,0 +1,98 @@
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import {
+  $getSelection,
+  $isRangeSelection,
+  COMMAND_PRIORITY_EDITOR,
+  createCommand,
+  REDO_COMMAND,
+  UNDO_COMMAND,
+} from 'lexical';
+import { useEffect, useRef, useState } from 'react';
+
+import useReport from '../../hooks/useReport';
+
+export const SPEECH_TO_TEXT_COMMAND = createCommand('SPEECH_TO_TEXT_COMMAND');
+
+const VOICE_COMMANDS = {
+  '\n': ({ selection }) => {
+    selection.insertParagraph();
+  },
+  redo: ({ editor }) => {
+    editor.dispatchCommand(REDO_COMMAND, undefined);
+  },
+  undo: ({ editor }) => {
+    editor.dispatchCommand(UNDO_COMMAND, undefined);
+  },
+};
+
+// SSR-safe check
+export const SUPPORT_SPEECH_RECOGNITION =
+  typeof window !== 'undefined' &&
+  ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
+
+function SpeechToTextPlugin() {
+  const [editor] = useLexicalComposerContext();
+  const [isEnabled, setIsEnabled] = useState(false);
+  const recognition = useRef(null);
+  const report = useReport();
+
+  useEffect(() => {
+    if (!SUPPORT_SPEECH_RECOGNITION) return;
+
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (isEnabled && recognition.current === null) {
+      recognition.current = new SpeechRecognition();
+      recognition.current.continuous = true;
+      recognition.current.interimResults = true;
+
+      recognition.current.addEventListener('result', (event) => {
+        const resultItem = event.results.item(event.resultIndex);
+        const { transcript } = resultItem.item(0);
+        report(transcript);
+
+        if (!resultItem.isFinal) return;
+
+        editor.update(() => {
+          const selection = $getSelection();
+          if ($isRangeSelection(selection)) {
+            const command = VOICE_COMMANDS[transcript.toLowerCase().trim()];
+
+            if (command) {
+              command({ editor, selection });
+            } else if (transcript.match(/\s*\n\s*/)) {
+              selection.insertParagraph();
+            } else {
+              selection.insertText(transcript);
+            }
+          }
+        });
+      });
+    }
+
+    if (recognition.current) {
+      if (isEnabled) recognition.current.start();
+      else recognition.current.stop();
+    }
+
+    return () => {
+      if (recognition.current !== null) recognition.current.stop();
+    };
+  }, [editor, isEnabled, report]);
+
+  useEffect(() => {
+    return editor.registerCommand(
+      SPEECH_TO_TEXT_COMMAND,
+      (_isEnabled) => {
+        setIsEnabled(_isEnabled);
+        return true;
+      },
+      COMMAND_PRIORITY_EDITOR
+    );
+  }, [editor]);
+
+  return null;
+}
+
+export default SUPPORT_SPEECH_RECOGNITION ? SpeechToTextPlugin : () => null;

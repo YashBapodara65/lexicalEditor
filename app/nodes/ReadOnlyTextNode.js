@@ -1,51 +1,94 @@
 import { TextNode } from "lexical";
 
-// Helper to generate UUID
-function generateId() {
-  return crypto.randomUUID?.() || Math.random().toString(36).substring(2, 10);
-}
-
 export class ReadOnlyTextNode extends TextNode {
+  __id;
+  __readonly;
+
   static getType() {
-    return "readonly-text"; // matches class type
+    return "readonly-text";
   }
 
   static clone(node) {
-    return new ReadOnlyTextNode(node.__text, node.__key, node.__id);
+    return new ReadOnlyTextNode(
+      node.__text,
+      node.__id,
+      node.__readonly,
+      node.__key
+    );
   }
 
-  static importJSON(serializedNode) {
-    const { text = "", id = null } = serializedNode;
-    return new ReadOnlyTextNode(text, id);
-  }
-
-  constructor(text = "", key = null, id = null) {
+  constructor(text, id = crypto.randomUUID(), readonly = true, key) {
     super(text, key);
-    this.readonly = true;
-    this.__id = id || generateId(); 
+    this.__id = id;
+    this.__readonly = readonly;
   }
 
-  isReadOnly() {
-    return true;
+  // 🔒 Prevent editing inside this node
+  canInsertTextBefore() {
+    return !this.__readonly;
   }
 
-  canHaveChildren() {
-    return false;
+  canInsertTextAfter() {
+    return !this.__readonly;
   }
 
-  isEditable() {
-    return false;
+  canBeEmpty() {
+    return !this.__readonly;
+  }
+
+  isTextEntity() {
+    return this.__readonly; // so it behaves like a single immutable unit
+  }
+
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    if (this.__readonly) {
+      dom.setAttribute("contenteditable", "false");
+      dom.classList.add("readonly-text");
+    }
+    return dom;
+  }
+
+  updateDOM(prevNode, dom, config) {
+    const isUpdated = super.updateDOM(prevNode, dom, config);
+    if (prevNode.__readonly !== this.__readonly) {
+      dom.setAttribute("contenteditable", this.__readonly ? "false" : "true");
+    }
+    return isUpdated;
   }
 
   exportJSON() {
-    const json = super.exportJSON();
-    json.readonly = true;
-    json.type = ReadOnlyTextNode.getType(); // ✅ must match getType
-    json.id = this.__id;
-    return json;
+    return {
+      ...super.exportJSON(),
+      id: this.__id,
+      readonly: this.__readonly,
+    };
+  }
+
+  static importJSON(serializedNode) {
+    const node = new ReadOnlyTextNode(
+      serializedNode.text,
+      serializedNode.id,
+      serializedNode.readonly
+    );
+    node.setFormat(serializedNode.format);
+    node.setStyle(serializedNode.style);
+    return node;
+  }
+
+  isReadOnly() {
+    return this.__readonly;
+  }
+
+  setReadOnly(value) {
+    this.getWritable().__readonly = value;
   }
 }
 
-export function $createReadOnlyTextNode(text = "", id = null) {
-  return new ReadOnlyTextNode(text,null,id);
+export function $createReadOnlyTextNode(text, id, readonly) {
+  return new ReadOnlyTextNode(text, id, readonly);
+}
+
+export function $isReadOnlyTextNode(node) {
+  return node instanceof ReadOnlyTextNode;
 }

@@ -16,7 +16,10 @@ export function createComment(content, author, id, timeStamp, deleted) {
     content,
     deleted: deleted === undefined ? false : deleted,
     id: id === undefined ? createUID() : id,
-    timeStamp: timeStamp === undefined ? performance.timeOrigin + performance.now() : timeStamp,
+    timeStamp:
+      timeStamp === undefined
+        ? performance.timeOrigin + performance.now()
+        : timeStamp,
     type: 'comment',
   };
 }
@@ -83,7 +86,8 @@ export class CommentStore {
         if (comment.type === 'thread' && comment.id === thread.id) {
           const newThread = cloneThread(comment);
           nextComments.splice(i, 1, newThread);
-          const insertOffset = offset !== undefined ? offset : newThread.comments.length;
+          const insertOffset =
+            offset !== undefined ? offset : newThread.comments.length;
           if (this.isCollaborative() && sharedCommentsArray !== null) {
             const parentSharedArray = sharedCommentsArray.get(i).get('comments');
             this._withRemoteTransaction(() => {
@@ -155,9 +159,10 @@ export class CommentStore {
   }
 
   registerOnChange(onChange) {
-    this._changeListeners.add(onChange);
+    const changeListeners = this._changeListeners;
+    changeListeners.add(onChange);
     return () => {
-      this._changeListeners.delete(onChange);
+      changeListeners.delete(onChange);
     };
   }
 
@@ -215,19 +220,29 @@ export class CommentStore {
     this._collabProvider = provider;
     const sharedCommentsArray = this._getCollabComments();
 
-    const connect = () => provider.connect();
+    const connect = () => {
+      provider.connect();
+    };
+
     const disconnect = () => {
       try {
         provider.disconnect();
-      } catch (_) {}
+      } catch (_e) {
+        // Do nothing
+      }
     };
 
     const unsubscribe = this._editor.registerCommand(
       TOGGLE_CONNECT_COMMAND,
       (payload) => {
         const shouldConnect = payload;
-        if (shouldConnect) connect();
-        else disconnect();
+        if (shouldConnect) {
+          console.log('Comments connected!');
+          connect();
+        } else {
+          console.log('Comments disconnected!');
+          disconnect();
+        }
         return false;
       },
       COMMAND_PRIORITY_LOW,
@@ -237,7 +252,6 @@ export class CommentStore {
       if (transaction.origin !== this) {
         for (let i = 0; i < events.length; i++) {
           const event = events[i];
-
           if (event instanceof YArrayEvent) {
             const target = event.target;
             const deltas = event.delta;
@@ -267,18 +281,15 @@ export class CommentStore {
                       type === 'thread'
                         ? createThread(
                             map.get('quote'),
-                            map
-                              .get('comments')
-                              .toArray()
-                              .map((innerComment) =>
-                                createComment(
-                                  innerComment.get('content'),
-                                  innerComment.get('author'),
-                                  innerComment.get('id'),
-                                  innerComment.get('timeStamp'),
-                                  innerComment.get('deleted'),
-                                ),
+                            map.get('comments').toArray().map((innerComment) =>
+                              createComment(
+                                innerComment.get('content'),
+                                innerComment.get('author'),
+                                innerComment.get('id'),
+                                innerComment.get('timeStamp'),
+                                innerComment.get('deleted'),
                               ),
+                            ),
                             id,
                           )
                         : createComment(
@@ -289,7 +300,11 @@ export class CommentStore {
                             map.get('deleted'),
                           );
                     this._withLocalTransaction(() => {
-                      this.addComment(commentOrThread, parentThread, offset);
+                      this.addComment(
+                        commentOrThread,
+                        parentThread,
+                        offset,
+                      );
                     });
                   });
               } else if (typeof retain === 'number') {
@@ -297,7 +312,7 @@ export class CommentStore {
               } else if (typeof del === 'number') {
                 for (let d = 0; d < del; d++) {
                   const commentOrThread =
-                    parentThread === undefined
+                    parentThread === undefined || parentThread === false
                       ? this._comments[offset]
                       : parentThread.comments[offset];
                   this._withLocalTransaction(() => {
@@ -312,7 +327,9 @@ export class CommentStore {
       }
     };
 
-    if (sharedCommentsArray === null) return () => null;
+    if (sharedCommentsArray === null) {
+      return () => null;
+    }
 
     sharedCommentsArray.observeDeep(onSharedCommentChanges);
     connect();

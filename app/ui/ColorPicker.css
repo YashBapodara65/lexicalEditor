@@ -24,7 +24,7 @@
   height: 16px;
   width: 16px;
   cursor: pointer;
-  list-style-type: none;
+  /* list-style-type: none; */
 }
 
 .color-picker-basic-color button.active {

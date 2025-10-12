@@ -50,7 +50,7 @@ import { createPortal } from 'react-dom';
 import useModal from '../../hooks/useModal';
 import ColorPicker from '../../ui/ColorPicker';
 import DropDown, { DropDownItem } from '../../ui/DropDown';
-import { TableBorderCellNode } from '../../nodes/TableBorderCellNode';
+import { CustomTableCellNode, TableBorderCellNode } from '../../nodes/TableBorderCellNode';
 
 function computeSelectionCount(selection) {
   const selectionShape = selection.getShape();
@@ -206,31 +206,35 @@ function TableActionMenu({
       const selection = $getSelection();
       if (!selection) return;
   
-      const toggleBorders = (cell) => {
-        if (!(cell instanceof TableBorderCellNode)) return;
-  
-        const borders = { ...cell.getBorders() };
-  
-        // Ensure the border exists; if not, initialize as false
-        if (!(side.toLowerCase() in borders)) {
-          borders[side.toLowerCase()] = false;
-        }
-  
-        // Toggle the value
-        borders[side.toLowerCase()] = !borders[side.toLowerCase()];
-        cell.setBorders(borders);
-      };
+      let cells = [];
   
       if ($isRangeSelection(selection)) {
         const [cell] = $getNodeTriplet(selection.anchor);
-        toggleBorders(cell);
+        if ($isTableCellNode(cell)) cells = [cell];
+      } else if ($isTableSelection(selection)) {
+        cells = selection.getNodes().filter($isTableCellNode);
       }
-  
-      if ($isTableSelection(selection)) {
-        selection.getNodes().forEach((node) => toggleBorders(node));
-      }
+      
+      console.log("🚀 ~ TableActionMenu ~ cells:", cells)
+      cells.forEach((cell) => {
+        if ($isTableCellNode(cell) && cell instanceof CustomTableCellNode) {
+          console.log("Original node:", {
+            key: cell.getKey(),
+            type: cell.getType(),
+            id: cell.__id,
+            borders: cell.__borders,
+          });
+      
+          const writable = cell.getWritable();
+          const currentBorders = writable.getBorders() || { top: true, right: true, bottom: true, left: true };
+          writable.setBorders({ ...currentBorders, [side.toLowerCase()]: !currentBorders[side.toLowerCase()] });
+          console.log("Original:", cell.getKey(), cell.getType());
+          console.log("Writable:", writable.getKey(), writable.getType());
+        }
+      });
+      
     });
-  }, [editor]);
+  }, [editor]);  
   
 
 
